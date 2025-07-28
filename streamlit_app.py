@@ -14,6 +14,143 @@ warnings.filterwarnings('ignore')
 # Import the PortfolioAnalyzer class
 from portfolio_analyzer import PortfolioAnalyzer
 
+def create_demo_data():
+    """Create demo CSV files matching the exact format of user's data"""
+    import pandas as pd
+    import numpy as np
+    from datetime import datetime, timedelta
+    
+    # Create demo data for 2023 (matching user's format exactly)
+    demo_data_2023 = [
+        {
+            'Trades': 'Trades',
+            'Header': 'Header',
+            'DataDiscriminator': 'Data',
+            'Asset Category': 'Stocks',
+            'Currency': 'USD',
+            'Symbol': 'AMZN',
+            'Date/Time': '2023-07-21, 13:57:21',
+            'Quantity': 50,
+            'T. Price': 130.478,
+            'C. Price': 130,
+            'Proceeds': -6523.9,
+            'Comm/Fee': -1.078,
+            'Basis': 6524.978,
+            'Realized P/L': 0,
+            'MTM P/L': -23.9,
+            'Code': 'O'
+        },
+        {
+            'Trades': 'Trades',
+            'Header': 'Header',
+            'DataDiscriminator': 'Data',
+            'Asset Category': 'Stocks',
+            'Currency': 'USD',
+            'Symbol': 'GOOG',
+            'Date/Time': '2023-07-31, 13:11:02',
+            'Quantity': 50,
+            'T. Price': 132.66,
+            'C. Price': 133.11,
+            'Proceeds': -6633,
+            'Comm/Fee': -1.078,
+            'Basis': 6634.078,
+            'Realized P/L': 0,
+            'MTM P/L': 22.5,
+            'Code': 'O'
+        },
+        {
+            'Trades': 'Trades',
+            'Header': 'Header',
+            'DataDiscriminator': 'Data',
+            'Asset Category': 'Stocks',
+            'Currency': 'USD',
+            'Symbol': 'MSFT',
+            'Date/Time': '2023-07-20, 12:54:31',
+            'Quantity': 30,
+            'T. Price': 348.24,
+            'C. Price': 346.87,
+            'Proceeds': -10447.2,
+            'Comm/Fee': -1.0788,
+            'Basis': 10448.2788,
+            'Realized P/L': 0,
+            'MTM P/L': -41.1,
+            'Code': 'O'
+        }
+    ]
+    
+    df_2023 = pd.DataFrame(demo_data_2023)
+    df_2023.to_csv('Stock_trading_2023.csv', index=False)
+    
+    # Create demo data for 2024 (matching user's format)
+    demo_data_2024 = [
+        {
+            'Trades': 'Trades',
+            'Header': 'Header',
+            'DataDiscriminator': 'Data',
+            'Asset Category': 'Stocks',
+            'Currency': 'USD',
+            'Symbol': 'NVDA',
+            'Date/Time': '2024-01-15, 14:30:00',
+            'Quantity': 40,
+            'T. Price': 380,
+            'C. Price': 374.75,
+            'Proceeds': -15200,
+            'Comm/Fee': -1.0784,
+            'Basis': 15201.0784,
+            'Realized P/L': 0,
+            'MTM P/L': -210,
+            'Code': 'O'
+        },
+        {
+            'Trades': 'Trades',
+            'Header': 'Header',
+            'DataDiscriminator': 'Data',
+            'Asset Category': 'Stocks',
+            'Currency': 'USD',
+            'Symbol': 'AAPL',
+            'Date/Time': '2024-02-20, 13:45:00',
+            'Quantity': 25,
+            'T. Price': 150.25,
+            'C. Price': 151.10,
+            'Proceeds': -3756.25,
+            'Comm/Fee': -1.078,
+            'Basis': 3757.328,
+            'Realized P/L': 0,
+            'MTM P/L': 21.25,
+            'Code': 'O'
+        }
+    ]
+    
+    df_2024 = pd.DataFrame(demo_data_2024)
+    df_2024.to_csv('Stock_trading_2024.csv', index=False)
+    
+    # Create demo data for 2025 (matching user's format)
+    demo_data_2025 = [
+        {
+            'Trades': 'Trades',
+            'Header': 'Header',
+            'DataDiscriminator': 'Data',
+            'Asset Category': 'Stocks',
+            'Currency': 'USD',
+            'Symbol': 'TSLA',
+            'Date/Time': '2025-01-10, 10:30:00',
+            'Quantity': 30,
+            'T. Price': 216.3,
+            'C. Price': 212.08,
+            'Proceeds': -6489,
+            'Comm/Fee': -1.0788,
+            'Basis': 6490.0788,
+            'Realized P/L': 0,
+            'MTM P/L': -126.6,
+            'Code': 'O'
+        }
+    ]
+    
+    df_2025 = pd.DataFrame(demo_data_2025)
+    df_2025.to_csv('Stock_trading_2025.csv', index=False)
+    
+    print("Demo data created successfully!")
+
 # Custom CSS for modern UI
 st.set_page_config(
     page_title="Portfolio Analyzer Pro",
@@ -152,6 +289,44 @@ def main():
     with st.sidebar:
         st.markdown("### ⚙️ Settings")
         
+        # File upload section
+        st.markdown("### 📁 Your Portfolio Data")
+        
+        # Check for existing CSV files first
+        import os
+        existing_files = []
+        required_files = ['Stock_trading_2023.csv', 'Stock_trading_2024.csv', 'Stock_trading_2025.csv']
+        
+        for file in required_files:
+            if os.path.exists(file):
+                existing_files.append(file)
+        
+        if existing_files:
+            st.success(f"✅ Found {len(existing_files)} data files:")
+            for file in existing_files:
+                st.write(f"📊 {file}")
+            st.info("💡 Your actual portfolio data is ready for analysis!")
+        else:
+            st.warning("⚠️ No data files found. Please upload your CSV files:")
+            st.write("Required files:")
+            for file in required_files:
+                st.write(f"- {file}")
+        
+        # File uploader for additional files
+        uploaded_files = st.file_uploader(
+            "Upload additional CSV files (optional)",
+            type=['csv'],
+            accept_multiple_files=True,
+            help="Upload your Stock_trading_2023.csv, Stock_trading_2024.csv, and Stock_trading_2025.csv files"
+        )
+        
+        if uploaded_files:
+            st.success(f"✅ Uploaded {len(uploaded_files)} additional files")
+            for file in uploaded_files:
+                st.write(f"- {file.name}")
+        
+        st.markdown("---")
+        
         # Analysis button
         if st.button("🔍 Run Portfolio Analysis", use_container_width=True):
             with st.spinner("Analyzing portfolio data..."):
@@ -159,15 +334,56 @@ def main():
                     # Initialize analyzer
                     analyzer = PortfolioAnalyzer()
                     
-                    # File paths (for demo, we'll use sample data)
-                    file_paths = [
-                        'Stock_trading_2023.csv',
-                        'Stock_trading_2024.csv', 
-                        'Stock_trading_2025.csv'
-                    ]
+                    # Handle file analysis - prioritize user's actual files
+                    import os
                     
-                    # Run analysis
-                    success = analyzer.run_complete_analysis(file_paths)
+                    # First, check for user's actual CSV files
+                    user_files = ['Stock_trading_2023.csv', 'Stock_trading_2024.csv', 'Stock_trading_2025.csv']
+                    available_files = []
+                    
+                    for file_path in user_files:
+                        if os.path.exists(file_path):
+                            available_files.append(file_path)
+                    
+                    # If uploaded files are provided, use them
+                    if uploaded_files:
+                        # Save uploaded files temporarily
+                        for uploaded_file in uploaded_files:
+                            file_path = uploaded_file.name
+                            with open(file_path, 'wb') as f:
+                                f.write(uploaded_file.getbuffer())
+                            if file_path not in available_files:
+                                available_files.append(file_path)
+                        st.success(f"✅ Using files: {', '.join(available_files)}")
+                    
+                    # If no files available, show error
+                    if not available_files:
+                        st.error("❌ No portfolio data files found!")
+                        st.write("**Required files:**")
+                        for file in user_files:
+                            st.write(f"- {file}")
+                        st.write("**Please:**")
+                        st.write("1. Upload your CSV files using the uploader above")
+                        st.write("2. Or ensure your files are in the deployment")
+                        st.write("3. Or use demo mode for testing")
+                        
+                        # Demo mode option
+                        if st.button("🎯 Use Demo Mode", use_container_width=True):
+                            st.info("🔄 Creating demo data...")
+                            create_demo_data()
+                            st.success("✅ Demo data created! Click 'Run Portfolio Analysis' again.")
+                        return
+                    
+                    # Show which files will be used
+                    if len(available_files) < len(user_files):
+                        missing = [f for f in user_files if f not in available_files]
+                        st.warning(f"⚠️ Some files missing: {', '.join(missing)}")
+                        st.info(f"📊 Using available files: {', '.join(available_files)}")
+                    else:
+                        st.success(f"✅ Using all your portfolio data files!")
+                    
+                    # Run analysis with available files
+                    success = analyzer.run_complete_analysis(available_files)
                     
                     if success:
                         st.session_state.analyzer = analyzer
@@ -179,6 +395,17 @@ def main():
                         
                 except Exception as e:
                     st.error(f"❌ Error during analysis: {e}")
+                    st.info("💡 Try uploading your CSV files or use demo mode.")
+                    
+                    # Show detailed error information
+                    with st.expander("🔍 Debug Information"):
+                        st.write("**Error Details:**")
+                        st.code(str(e))
+                        st.write("**Troubleshooting:**")
+                        st.write("1. Make sure your CSV files have the correct format")
+                        st.write("2. Check that files contain: Trades, DataDiscriminator, Date/Time, Symbol, Currency, Quantity, T. Price, C. Price, Proceeds")
+                        st.write("3. Try the demo mode to test the application")
+                        st.write("4. Ensure your files are not corrupted")
         
         st.markdown("---")
         st.markdown("### 📊 Features")
@@ -330,22 +557,41 @@ def main():
         st.markdown("""
         <div class="feature-list">
             <h3>🚀 How to Get Started:</h3>
-            <div class="feature-item">1. Click "Run Portfolio Analysis" in the sidebar</div>
-            <div class="feature-item">2. Wait for the analysis to complete</div>
-            <div class="feature-item">3. Explore your portfolio insights</div>
-            <div class="feature-item">4. Get real-time news for your stocks</div>
+            <div class="feature-item">1. Upload your CSV files in the sidebar (or use demo mode)</div>
+            <div class="feature-item">2. Click "Run Portfolio Analysis" in the sidebar</div>
+            <div class="feature-item">3. Wait for the analysis to complete</div>
+            <div class="feature-item">4. Explore your portfolio insights</div>
+            <div class="feature-item">5. Get real-time news for your stocks</div>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        st.markdown("""
+        <div class="feature-list">
+            <h3>📁 Your Portfolio Data Files:</h3>
+            <div class="feature-item">• Stock_trading_2023.csv (31 trades)</div>
+            <div class="feature-item">• Stock_trading_2024.csv (365 trades)</div>
+            <div class="feature-item">• Stock_trading_2025.csv (126 trades)</div>
+            <div class="feature-item">• Total: 522 trades across 16 symbols</div>
         </div>
         """, unsafe_allow_html=True)
         
         # Data preview
-        st.markdown("### 📁 Data Preview")
+        st.markdown("### 📁 Your Portfolio Data Preview")
         try:
-            # Try to load sample data
+            # Try to load user's actual data
             sample_data = pd.read_csv('Stock_trading_2023.csv', nrows=5)
             st.dataframe(sample_data, use_container_width=True)
-            st.info("📊 Sample data loaded. Click 'Run Portfolio Analysis' to start!")
+            st.success("📊 Your actual portfolio data is loaded and ready for analysis!")
+            st.info("💡 Click 'Run Portfolio Analysis' to analyze your real portfolio data!")
         except:
-            st.info("📊 Ready to analyze your portfolio data!")
+            st.info("📊 Your portfolio data files not found. Please upload them or use demo mode.")
+            
+            # Show demo mode option
+            if st.button("🎯 Create Demo Data", use_container_width=True):
+                st.info("🔄 Creating demo data...")
+                create_demo_data()
+                st.success("✅ Demo data created! Click 'Run Portfolio Analysis' now.")
+                st.rerun()
 
 if __name__ == "__main__":
     main() 

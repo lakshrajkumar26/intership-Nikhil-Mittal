@@ -25,11 +25,13 @@ class PortfolioAnalyzer:
         for file_path in file_paths:
             try:
                 df = pd.read_csv(file_path)
-                # Clean and process the data
-                df = df[df['Trades'] == 'Trades']  # Remove header rows
-                df = df[df['DataDiscriminator'] == 'Order']  # Keep only order data
                 
-                # Convert date/time column
+                # Handle the exact format of user's CSV files
+                # Filter for actual trade data (not header rows)
+                df = df[df['Trades'] == 'Trades']  # Remove header rows
+                df = df[df['DataDiscriminator'] == 'Data']  # Keep only data rows (not 'Order')
+                
+                # Convert date/time column - handle the exact format from user's files
                 df['Date/Time'] = pd.to_datetime(df['Date/Time'], format='%Y-%m-%d, %H:%M:%S')
                 df['Date'] = df['Date/Time'].dt.date
                 
@@ -41,11 +43,16 @@ class PortfolioAnalyzer:
                 df['C. Price'] = pd.to_numeric(df['C. Price'], errors='coerce')
                 df['Proceeds'] = pd.to_numeric(df['Proceeds'], errors='coerce')
                 
+                # Add any missing columns that might be needed
+                if 'Currency' not in df.columns:
+                    df['Currency'] = 'USD'
+                
                 self.trades_data.append(df)
                 print(f"Loaded {len(df)} trades from {file_path}")
                 
             except Exception as e:
                 print(f"Error loading {file_path}: {e}")
+                print(f"File columns: {df.columns.tolist() if 'df' in locals() else 'No dataframe'}")
         
         # Combine all data
         if self.trades_data:
