@@ -25,7 +25,7 @@ def create_demo_data():
         {
             'Trades': 'Trades',
             'Header': 'Header',
-            'DataDiscriminator': 'Data',
+            'DataDiscriminator': 'Order',
             'Asset Category': 'Stocks',
             'Currency': 'USD',
             'Symbol': 'AMZN',
@@ -43,7 +43,7 @@ def create_demo_data():
         {
             'Trades': 'Trades',
             'Header': 'Header',
-            'DataDiscriminator': 'Data',
+            'DataDiscriminator': 'Order',
             'Asset Category': 'Stocks',
             'Currency': 'USD',
             'Symbol': 'GOOG',
@@ -61,7 +61,7 @@ def create_demo_data():
         {
             'Trades': 'Trades',
             'Header': 'Header',
-            'DataDiscriminator': 'Data',
+            'DataDiscriminator': 'Order',
             'Asset Category': 'Stocks',
             'Currency': 'USD',
             'Symbol': 'MSFT',
@@ -86,7 +86,7 @@ def create_demo_data():
         {
             'Trades': 'Trades',
             'Header': 'Header',
-            'DataDiscriminator': 'Data',
+            'DataDiscriminator': 'Order',
             'Asset Category': 'Stocks',
             'Currency': 'USD',
             'Symbol': 'NVDA',
@@ -104,7 +104,7 @@ def create_demo_data():
         {
             'Trades': 'Trades',
             'Header': 'Header',
-            'DataDiscriminator': 'Data',
+            'DataDiscriminator': 'Order',
             'Asset Category': 'Stocks',
             'Currency': 'USD',
             'Symbol': 'AAPL',
@@ -129,7 +129,7 @@ def create_demo_data():
         {
             'Trades': 'Trades',
             'Header': 'Header',
-            'DataDiscriminator': 'Data',
+            'DataDiscriminator': 'Order',
             'Asset Category': 'Stocks',
             'Currency': 'USD',
             'Symbol': 'TSLA',

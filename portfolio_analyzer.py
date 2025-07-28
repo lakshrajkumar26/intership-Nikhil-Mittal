@@ -29,7 +29,7 @@ class PortfolioAnalyzer:
                 # Handle the exact format of user's CSV files
                 # Filter for actual trade data (not header rows)
                 df = df[df['Trades'] == 'Trades']  # Remove header rows
-                df = df[df['DataDiscriminator'] == 'Data']  # Keep only data rows (not 'Order')
+                df = df[df['DataDiscriminator'] == 'Order']  # Keep only order rows (not 'Data')
                 
                 # Convert date/time column - handle the exact format from user's files
                 df['Date/Time'] = pd.to_datetime(df['Date/Time'], format='%Y-%m-%d, %H:%M:%S')
@@ -52,7 +52,13 @@ class PortfolioAnalyzer:
                 
             except Exception as e:
                 print(f"Error loading {file_path}: {e}")
-                print(f"File columns: {df.columns.tolist() if 'df' in locals() else 'No dataframe'}")
+                if 'df' in locals():
+                    print(f"File columns: {df.columns.tolist()}")
+                    print(f"Data shape: {df.shape}")
+                    print(f"Sample data:")
+                    print(df.head())
+                else:
+                    print("No dataframe created")
         
         # Combine all data
         if self.trades_data:
@@ -538,39 +544,65 @@ class PortfolioAnalyzer:
     def run_complete_analysis(self, file_paths):
         """Run the complete portfolio analysis"""
         print("Starting portfolio analysis...")
+        print(f"Processing files: {file_paths}")
         
         try:
             # Step 1: Load trade data
+            print("Step 1: Loading trade data...")
             self.load_trade_data(file_paths)
             
+            if self.all_trades.empty:
+                print("ERROR: No trade data loaded!")
+                return False
+            
+            print(f"Successfully loaded {len(self.all_trades)} trades")
+            
             # Step 2: Create holdings list
+            print("Step 2: Creating holdings list...")
             self.create_master_holdings_list()
             
+            if self.holdings.empty:
+                print("ERROR: No holdings created!")
+                return False
+            
+            print(f"Successfully created holdings for {len(self.holdings)} symbols")
+            
             # Step 3: Get stock splits
+            print("Step 3: Getting stock splits...")
             self.get_stock_splits()
             
             # Step 4: Apply stock splits
+            print("Step 4: Applying stock splits...")
             self.apply_stock_splits()
             
             # Step 5: Get currency rates
+            print("Step 5: Getting currency rates...")
             self.get_currency_rates()
             
             # Step 6: Compute transaction prices in currencies
+            print("Step 6: Computing transaction prices...")
             self.compute_transaction_prices_in_currencies()
             
             # Step 7: Get historical prices
+            print("Step 7: Getting historical prices...")
             self.get_historical_prices()
             
             # Step 8: Compute portfolio values
+            print("Step 8: Computing portfolio values...")
             self.compute_portfolio_values()
             
             # Step 9: Compute XIRR
+            print("Step 9: Computing XIRR...")
             self.compute_xirr()
             
-            print("Portfolio analysis completed!")
+            print("Portfolio analysis completed successfully!")
+            return True
             
         except Exception as e:
             print(f"Error during analysis: {e}")
+            import traceback
+            traceback.print_exc()
+            
             # Continue with basic analysis even if some steps fail
             if not hasattr(self, 'all_trades') or self.all_trades.empty:
                 print("Critical error: Could not load trade data")
